@@ -7,7 +7,6 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 
 export class App extends Component {
-  
   state = {
     contacts: [
       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -20,10 +19,15 @@ export class App extends Component {
 
   formSubmit = ({ name, number }) => {
     const contact = { id: nanoid(), name, number };
-    
-    if (this.state.contacts.some(e => e.name === name)) {
 
-    return alert(`${name} is already in contacts!`);
+    const lowerCaseName = name.toLowerCase();
+
+    if (
+      this.state.contacts.some(
+        contact => contact.name.toLowerCase() === lowerCaseName
+      )
+    ) {
+      return alert(`${name} is already in contacts!`);
     }
 
     this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
@@ -32,8 +36,7 @@ export class App extends Component {
   getFilteredContacts = () => {
     const { contacts, filter } = this.state;
     const filterContactsList = contacts.filter(contact => {
-
-    return contact.name.toLowerCase().includes(filter.toLowerCase());
+      return contact.name.toLowerCase().includes(filter.toLowerCase());
     });
 
     return filterContactsList;
@@ -44,22 +47,19 @@ export class App extends Component {
 
     this.setState({ [name]: value });
   };
-  
+
   deleteContact = contactId => {
-    
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
 
   render() {
-    const {filter} = this.state;
+    const { filter } = this.state;
 
     return (
       <div>
-        <h1>
-          Phonebook
-        </h1>
+        <h1>Phonebook</h1>
         <Section title="Phonebook">
           <ContactForm onSubmit={this.formSubmit} />
         </Section>
